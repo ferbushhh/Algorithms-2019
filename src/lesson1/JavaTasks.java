@@ -114,7 +114,7 @@ public class JavaTasks {
         String str;
         str = reader.readLine();
         while (str != null) {
-            //mas[(int) (Double.parseDouble(str)*10+abs(lowBorder)*10)];
+            //mas[(int) (Double.parseDouble(str)*10+abs(lowBorder)*10)];;
             int index = (int) (Double.parseDouble(str)*10);
             mas[index+abs(lowBorder)*10]++;
             str = reader.readLine();
