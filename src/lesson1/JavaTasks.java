@@ -2,6 +2,12 @@ package lesson1;
 
 import kotlin.NotImplementedError;
 
+import java.io.*;
+import java.util.*;
+
+import static java.lang.StrictMath.abs;
+import static java.lang.StrictMath.min;
+
 @SuppressWarnings("unused")
 public class JavaTasks {
     /**
@@ -98,8 +104,32 @@ public class JavaTasks {
      * 99.5
      * 121.3
      */
-    static public void sortTemperatures(String inputName, String outputName) {
-        throw new NotImplementedError();
+    static public void sortTemperatures(String inputName, String outputName) throws IOException {
+        int highBorder = 500;
+        int lowBorder = -273;
+        int border = abs(highBorder)*10+abs(lowBorder)*10; //умножаем на 10 чтобы избавиться от числа после запятой
+        int mas[] = new int[border + 1];
+        BufferedReader reader = new BufferedReader(new FileReader(new File(inputName)));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outputName)));
+        String str;
+        str = reader.readLine();
+        while (str != null) {
+            //mas[(int) (Double.parseDouble(str)*10+abs(lowBorder)*10)];
+            int index = (int) (Double.parseDouble(str)*10);
+            mas[index+abs(lowBorder)*10]++;
+            str = reader.readLine();
+        }
+        for (int i = 0; i<border; i++) {
+            while (mas[i] != 0) {
+                writer.write(String.valueOf((double)((i+lowBorder*10)/10.0)) + "\n");
+                mas[i]--;
+            }
+        }
+        writer.close();
+
+        /* Оценка ресурсоемкости: R = O(1)
+        Оценка трудоемкости: T = O(N)
+         */
     }
 
     /**
@@ -131,8 +161,52 @@ public class JavaTasks {
      * 2
      * 2
      */
-    static public void sortSequence(String inputName, String outputName) {
-        throw new NotImplementedError();
+
+    /*public static void main(String[] args) throws IOException {
+        sortSequence("inputForMe/seq_in6.txt", "temp.txt");
+    }*/
+
+    static public void sortSequence(String inputName, String outputName) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(new File(inputName)));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outputName)));
+        String str = reader.readLine();
+
+        Map<Integer, Integer> mas = new HashMap<>();
+        int maxVal = 0;
+        int maxNum = 0;
+        while (str != null) {
+            int a = (int) (Integer.parseInt(str));
+            if (mas.containsKey(a)) {
+                int val = mas.get(a);
+                mas.put(a, val+1);
+            }
+            else
+                mas.put(a, 1);
+
+            if (mas.get(a) > maxVal || (mas.get(a) == maxVal && a<maxNum)) {
+                maxVal = mas.get(a);
+                maxNum = a;
+            }
+            str = reader.readLine();
+        }
+
+        BufferedReader readerSecond = new BufferedReader(new FileReader(new File(inputName)));
+        String str2 = readerSecond.readLine();
+        while (str2 != null) {
+            int a = (int) (Integer.parseInt(str2));
+            if (a != maxNum) {
+                writer.write(a + "\r\n");
+            }
+            str2 = readerSecond.readLine();
+        }
+
+        for (int i = 0; i < maxVal; i++) {
+               writer.write(String.valueOf(maxNum) + "\r\n");
+        }
+        writer.close();
+        /* Оценка ресурсоемкости: R = O(N)
+        Оценка трудоемкости: T = O(N)
+         */
     }
 
     /**
