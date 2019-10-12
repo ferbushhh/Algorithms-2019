@@ -74,6 +74,10 @@ abstract class AbstractAlgorithmsTests {
     }
 
     fun longestCommonSubstring(longestCommonSubstring: (String, String) -> String) {
+        assertEquals("о", longestCommonSubstring("о", "о"))
+        assertEquals("Это ", longestCommonSubstring("Это грязный  кот", "Это чистый кот"))
+        //тест на условие: Если имеется несколько самых длинных общих подстрок одной длины,
+        // вернуть ту из них, которая встречается раньше в строке first
         assertEquals("", longestCommonSubstring("мой мир", "я"))
         assertEquals("зд", longestCommonSubstring("здравствуй мир", "мы здесь"))
         assertEquals("СЕРВАТОР", longestCommonSubstring("ОБСЕРВАТОРИЯ", "КОНСЕРВАТОРЫ"))

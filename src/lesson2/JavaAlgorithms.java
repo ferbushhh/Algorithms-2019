@@ -3,6 +3,11 @@ package lesson2;
 import kotlin.NotImplementedError;
 import kotlin.Pair;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @SuppressWarnings("unused")
@@ -99,8 +104,41 @@ public class JavaAlgorithms {
      * Если имеется несколько самых длинных общих подстрок одной длины,
      * вернуть ту из них, которая встречается раньше в строке first.
      */
-    static public String longestCommonSubstring(String firs, String second) {
-        throw new NotImplementedError();
+    static public String longestCommonSubstring(String first, String second) {
+        int lengthFirst = first.length();
+        int lengthSecond = second.length();
+        int startIndex = 0;
+        int maxCount = 0;
+
+        if (first.equals(second))
+            return first;
+
+
+        if (lengthFirst == 0 || lengthSecond == 0)
+            return "";
+
+
+        for (int i = 0; i < lengthFirst; i++) {
+            for (int j = 0; j < lengthSecond; j++) {
+                int count = 0;
+                while ((first.charAt(i + count) == second.charAt(j + count)) && (i + 1 + count) < lengthFirst
+                                        && (j + 1 + count) < lengthSecond)
+                    count++;
+                if (count > maxCount) {
+                    maxCount = count;
+                    startIndex = i;
+                }
+            }
+        }
+
+        if (maxCount != 0)
+            return first.substring(startIndex, startIndex + maxCount);
+        else
+            return "";
+
+        /* Оценка ресурсоемкости: R = O(1),
+        Оценка трудоемкости: T = O(MN), где N - длина первой строки, M - длина второй строки
+         */
     }
 
     /**
@@ -128,7 +166,7 @@ public class JavaAlgorithms {
      * К Р А Н
      * А К В А
      *
-     * В аргументе words содержится множество слов для поиска, например,
+      * В аргументе words содержится множество слов для поиска, например,
      * ТРАВА, КРАН, АКВА, НАРТЫ, РАК.
      *
      * Попытаться найти каждое из слов в матрице букв, используя правила игры БАЛДА,
@@ -143,7 +181,58 @@ public class JavaAlgorithms {
      * В файле буквы разделены пробелами, строки -- переносами строк.
      * Остальные символы ни в файле, ни в словах не допускаются.
      */
-    static public Set<String> baldaSearcher(String inputName, Set<String> words) {
-        throw new NotImplementedError();
+
+    static public Set<String> baldaSearcher(String inputName, Set<String> words) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(new File(inputName), StandardCharsets.UTF_8));) {
+
+            ArrayList<String[]> matrix = new ArrayList<>();
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                matrix.add(line.split(" "));
+            }
+
+            int width = matrix.size();
+            int height = matrix.get(0).length;
+
+            Set<String> result = new HashSet<>();
+
+            for (String word : words) {
+                boolean flag = false;
+                for (int i = 0; i < width; i++) {
+                    for (int j = 0; j < height; j++) {
+                        flag = recursion(matrix, word, i, j, 0);
+                        if (flag) result.add(word);
+                        if (flag) break;
+                    }
+                    if (flag) break;
+                }
+            }
+            return result;
+        }
     }
+
+    static private boolean recursion(ArrayList<String[]> matrix, String word, int i, int j, int count) {
+        if (count == word.length())
+            return true;
+        if (i<0 || j<0 || i>=matrix.size() || j>=matrix.get(0).length)
+            return false;
+        if (!(matrix.get(i)[j].equals(word.substring(count, count + 1))))
+            return false;
+        if (recursion(matrix, word, i+1, j, count + 1))
+            return true;
+        if (recursion(matrix, word, i-1, j, count + 1))
+            return true;
+        if (recursion(matrix, word, i, j+1, count + 1))
+            return true;
+        if (recursion(matrix, word, i, j-1, count + 1))
+            return true;
+        return false;
+    }
+    /* Оценка ресурсоемкости: R = O(MN),
+        Оценка трудоемкости: T = O(M*N*K*4^Q), где N - длина массива, M - ширина массива, K - кол-во слов,
+        Q - максимальное количество букв в слове (худший вариант)
+        Проходим по массиву в худшем случае M*N*K раз и вызываем рекурсию. В худшем случае рекурсия может вызваться
+        4 раза (поэтому 4 в основании степени), а вызывается она "вглубь" по количеству букв в слове.
+    */
 }
