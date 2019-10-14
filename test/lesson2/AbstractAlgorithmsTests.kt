@@ -174,5 +174,11 @@ abstract class AbstractAlgorithmsTests {
                 )
             )
         )
+        assertEquals( setOf(),
+            baldaSearcher("input/balda_in1.txt", setOf("КОМПЬЮТЕР"))
+        )
+        assertEquals( setOf(),
+            baldaSearcher("input/balda_in1.txt", setOf()) //краевой значение
+        )
     }
 }
