@@ -7,6 +7,8 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+import static java.lang.Math.sqrt;
+
 @SuppressWarnings("unused")
 public class JavaAlgorithms {
     /**
@@ -147,9 +149,30 @@ public class JavaAlgorithms {
      *
      * Справка: простым считается число, которое делится нацело только на 1 и на себя.
      * Единица простым числом не считается.
+     *
+     * Оценка ресурсоемкости: R = O(1),
+     * Оценка трудоемкости: T = O(N*sqrt(N))
      */
     static public int calcPrimesNumber(int limit) {
-        throw new NotImplementedError();
+        if (limit < 2) return 0;
+
+        int sq = (int) sqrt(limit) + 1;
+
+        int ans = 0;
+
+        boolean flag;
+        for (int i = 2; i <= limit; i++) {
+            flag = false;
+            for (int j = 2; j <= sq; j++) {
+                if (i % j == 0 && i != j) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag)
+                ans++;
+        }
+        return ans;
     }
 
     /**
