@@ -5,10 +5,7 @@ import kotlin.Pair;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public class JavaAlgorithms {
@@ -183,7 +180,10 @@ public class JavaAlgorithms {
      */
 
     static public Set<String> baldaSearcher(String inputName, Set<String> words) throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(new File(inputName), StandardCharsets.UTF_8));) {
+        try (//BufferedReader reader = new BufferedReader(new FileReader(new File(inputName), StandardCharsets.UTF_8));
+             BufferedReader reader = new BufferedReader(
+                     new InputStreamReader(
+                             new FileInputStream(inputName), StandardCharsets.UTF_8))) {
 
             ArrayList<String[]> matrix = new ArrayList<>();
             String line;
