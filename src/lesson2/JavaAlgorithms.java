@@ -150,29 +150,30 @@ public class JavaAlgorithms {
      * Справка: простым считается число, которое делится нацело только на 1 и на себя.
      * Единица простым числом не считается.
      *
-     * Оценка ресурсоемкости: R = O(1),
+     * Оценка ресурсоемкости: R = O(N),
      * Оценка трудоемкости: T = O(N*sqrt(N))
      */
-    static public int calcPrimesNumber(int limit) {
+    static public int calcPrimesNumber(int limit) { //true - простое
         if (limit < 2) return 0;
 
-        int sq = (int) sqrt(limit) + 1;
+        boolean[] mas = new boolean[limit+1];
+        int res = 0;
 
-        int ans = 0;
+        for (int i = 2; i<=limit; i++)
+            mas[i] = true;
 
-        boolean flag;
-        for (int i = 2; i <= limit; i++) {
-            flag = false;
-            for (int j = 2; j <= sq; j++) {
-                if (i % j == 0 && i != j) {
-                    flag = true;
-                    break;
-                }
+        for (int i = 2; i<=limit; i++) {
+            if (mas[i]) {
+                for (int j = 2; i*j<=limit; j++)
+                    mas[i*j] = false;
             }
-            if (!flag)
-                ans++;
         }
-        return ans;
+
+        for (int i = 0; i<=limit; i++)
+            if (mas[i])
+                res++;
+
+         return res;
     }
 
     /**
