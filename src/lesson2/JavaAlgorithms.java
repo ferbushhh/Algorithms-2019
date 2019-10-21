@@ -151,27 +151,26 @@ public class JavaAlgorithms {
      * Единица простым числом не считается.
      *
      * Оценка ресурсоемкости: R = O(N),
-     * Оценка трудоемкости: T = O(N*sqrt(N))
+     * Оценка трудоемкости: T = O(N*log(log(N)))
      */
     static public int calcPrimesNumber(int limit) { //true - простое
         if (limit < 2) return 0;
 
         boolean[] mas = new boolean[limit+1];
-        int res = 0;
+        int res = limit-1;
 
         for (int i = 2; i<=limit; i++)
             mas[i] = true;
 
         for (int i = 2; i<=limit; i++) {
             if (mas[i]) {
-                for (int j = 2; i*j<=limit; j++)
-                    mas[i*j] = false;
+                for (int j = 2; i*j<=limit; j++) {
+                    if (mas[i * j])
+                        res--;
+                    mas[i * j] = false;
+                }
             }
         }
-
-        for (int i = 0; i<=limit; i++)
-            if (mas[i])
-                res++;
 
          return res;
     }
