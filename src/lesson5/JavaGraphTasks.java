@@ -2,6 +2,7 @@ package lesson5;
 
 import kotlin.NotImplementedError;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -35,6 +36,38 @@ public class JavaGraphTasks {
      */
     public static List<Graph.Edge> findEulerLoop(Graph graph) {
         throw new NotImplementedError();
+        /*
+        Set<Graph.Edge> edge = graph.getEdges();
+        Set<Graph.Vertex> vertex = graph.getVertices();
+        List<Graph.Vertex> listOfVertex = new LinkedList<>();
+        List<Graph.Edge> res = new LinkedList<>();
+
+        //boolean eulerLoop = true;
+
+        for (Graph.Vertex V : vertex) {
+            int connections = graph.getConnections(V).size();
+            if (connections % 2 != 0)
+                return res;
+        }
+
+        searchLoop(graph, vertex, listOfVertex, edge, vertex.iterator().next());
+
+        for (int i = 0; i < listOfVertex.size() - 1; i++)
+            res.add(graph.getConnection(listOfVertex.get(i), listOfVertex.get(i+1)));
+
+        return res; */
+    }
+
+    private static void searchLoop (Graph graph, Set<Graph.Vertex> vertex, List<Graph.Vertex> listOfVertex,
+                                    Set<Graph.Edge> edge, Graph.Vertex actualVertex) {
+        for (Graph.Vertex v : vertex) {
+            Graph.Edge edgeBetweenThem = graph.getConnection(v, actualVertex);
+            if (edge.contains(edgeBetweenThem)) {
+                edge.remove(edgeBetweenThem);
+                searchLoop(graph, vertex, listOfVertex, edge, v);
+            }
+        }
+        listOfVertex.add(actualVertex);
     }
 
     /**
