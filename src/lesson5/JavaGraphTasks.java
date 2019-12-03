@@ -2,9 +2,7 @@ package lesson5;
 
 import kotlin.NotImplementedError;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public class JavaGraphTasks {
@@ -33,16 +31,18 @@ public class JavaGraphTasks {
      *
      * Справка: Эйлеров цикл -- это цикл, проходящий через все рёбра
      * связного графа ровно по одному разу
+     *
+     * Оценка ресурсоемкости: R = O(V + E),
+     * Оценка трудоемкости: T = O(V * E)
+     *
      */
     public static List<Graph.Edge> findEulerLoop(Graph graph) {
-        throw new NotImplementedError();
-        /*
         Set<Graph.Edge> edge = graph.getEdges();
         Set<Graph.Vertex> vertex = graph.getVertices();
         List<Graph.Vertex> listOfVertex = new LinkedList<>();
         List<Graph.Edge> res = new LinkedList<>();
 
-        //boolean eulerLoop = true;
+        if (edge.isEmpty() || vertex.isEmpty()) return res;
 
         for (Graph.Vertex V : vertex) {
             int connections = graph.getConnections(V).size();
@@ -55,7 +55,7 @@ public class JavaGraphTasks {
         for (int i = 0; i < listOfVertex.size() - 1; i++)
             res.add(graph.getConnection(listOfVertex.get(i), listOfVertex.get(i+1)));
 
-        return res; */
+        return res;
     }
 
     private static void searchLoop (Graph graph, Set<Graph.Vertex> vertex, List<Graph.Vertex> listOfVertex,
@@ -151,8 +151,60 @@ public class JavaGraphTasks {
      * J ------------ K
      *
      * Ответ: A, E, J, K, D, C, H, G, B, F, I
+     *
+     * Оценка ресурсоемкости: R = O(V), худший вариант - все вершины
+     * Оценка трудоемкости: T = O(V!), т.к. рекурсивная функция
      */
     public static Path longestSimplePath(Graph graph) {
-        throw new NotImplementedError();
+        List<Graph.Vertex> vertex = new LinkedList<>(graph.getVertices());
+
+        Set<Graph.Vertex> path = new LinkedHashSet<>();
+        List<Graph.Vertex> result = new LinkedList<>();
+
+        int sizeVertex = vertex.size();
+
+        if (sizeVertex == 0) {
+            return new Path();
+        }
+
+        for (int i = 0; i < sizeVertex; i++) {
+            Graph.Vertex curVertex = vertex.get(i);
+
+            path.add(curVertex);
+            findMaxPath(graph, path, curVertex, result);
+
+            if (result.size() == sizeVertex) break;
+        }
+
+        Path p = new Path(result.get(0));
+        for (int i = 1; i < result.size(); i++)
+            p = new Path(p, graph, result.get(i));
+        return p;
     }
+
+    private static void findMaxPath(Graph graph, Set<Graph.Vertex> path, Graph.Vertex vertex, List<Graph.Vertex> result) {
+        Set<Graph.Vertex> neighbors = graph.getNeighbors(vertex);
+
+        int pathSize = path.size();
+        int vertexGraphSize = graph.getVertices().size();
+
+        for (Graph.Vertex neighbor : neighbors) {
+            if (!path.contains(neighbor)) {
+                path.add(neighbor);
+
+                if (pathSize != vertexGraphSize) {
+                    findMaxPath(graph, path, neighbor, result);
+                }
+            }
+        }
+
+        if (pathSize <= vertexGraphSize) {
+            if (pathSize > result.size()) {
+                result.clear();
+                result.addAll(path);
+            }
+            path.remove(vertex);
+        }
+    }
+
 }
