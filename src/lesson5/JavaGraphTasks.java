@@ -39,8 +39,9 @@ public class JavaGraphTasks {
     public static List<Graph.Edge> findEulerLoop(Graph graph) {
         Set<Graph.Edge> edge = graph.getEdges();
         Set<Graph.Vertex> vertex = graph.getVertices();
-        List<Graph.Vertex> listOfVertex = new LinkedList<>();
-        List<Graph.Edge> res = new LinkedList<>();
+        List<Graph.Vertex> listOfVertex = new ArrayList<>(); //лучше Array, т.к. доступ по индексу у него происходит
+        //за O(1), а у Linked  - за O(N). Добавление в конец у них происходит одинаково за O(1)
+        List<Graph.Edge> res = new LinkedList<>(); //здесь мы не обращаемся по индексу, только добавление
 
         if (edge.isEmpty() || vertex.isEmpty()) return res;
 
@@ -59,12 +60,12 @@ public class JavaGraphTasks {
     }
 
     private static void searchLoop (Graph graph, Set<Graph.Vertex> vertex, List<Graph.Vertex> listOfVertex,
-                                    Set<Graph.Edge> edge, Graph.Vertex actualVertex) {
+                                    Set<Graph.Edge> currentListOfEdge, Graph.Vertex actualVertex) {
         for (Graph.Vertex v : vertex) {
             Graph.Edge edgeBetweenThem = graph.getConnection(v, actualVertex);
-            if (edge.contains(edgeBetweenThem)) {
-                edge.remove(edgeBetweenThem);
-                searchLoop(graph, vertex, listOfVertex, edge, v);
+            if (currentListOfEdge.contains(edgeBetweenThem)) {
+                currentListOfEdge.remove(edgeBetweenThem);
+                searchLoop(graph, vertex, listOfVertex, currentListOfEdge, v);
             }
         }
         listOfVertex.add(actualVertex);

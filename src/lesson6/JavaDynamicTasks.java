@@ -106,9 +106,9 @@ public class JavaDynamicTasks {
             }
         }
 
-        List<Integer> prevResult = new LinkedList<>();
+        List<Integer> result = new ArrayList<>();
 
-        while (pos != -1) {
+        /*while (pos != -1) {
             prevResult.add(list.get(pos));
             pos = early[pos];
         }
@@ -116,7 +116,12 @@ public class JavaDynamicTasks {
         List<Integer> result = new LinkedList<>();
 
         for (int i = prevResult.size() - 1; i > -1; i--)
-            result.add(prevResult.get(i));
+            result.add(prevResult.get(i)); */
+
+        while (pos != -1) {
+            result.add(0, list.get(pos));
+            pos = early[pos];
+        }
 
         return result;
     }

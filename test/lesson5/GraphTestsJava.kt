@@ -11,18 +11,6 @@ class GraphTestsJava : AbstractGraphTests() {
     }
 
     @Test
-    @Tag("Normal")
-    fun testMinimumSpanningTree() {
-        minimumSpanningTree { let { JavaGraphTasks.minimumSpanningTree(it) } }
-    }
-
-    @Test
-    @Tag("Hard")
-    fun testLargestIndependentVertexSet() {
-        largestIndependentVertexSet { let { JavaGraphTasks.largestIndependentVertexSet(it) } }
-    }
-
-    @Test
     @Tag("Hard")
     fun testLongestSimplePath() {
         longestSimplePath { let { JavaGraphTasks.longestSimplePath(it) } }

@@ -163,8 +163,8 @@ abstract class AbstractGraphTests {
             addConnection(d, c)
             addConnection(d, b)
         }.build()
-        val loop5 = graph.findEulerLoop()
-        loop5.assert(shouldExist = true, graph = graph)
+        val loop5 = graph5.findEulerLoop()
+        loop5.assert(shouldExist = true, graph = graph5)
     }
 
     fun minimumSpanningTree(minimumSpanningTree: Graph.() -> Graph) {
